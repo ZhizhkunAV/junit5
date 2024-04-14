@@ -1,9 +1,7 @@
 package tests;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 import pages.git.AiPage;
 import pages.git.MainGitPage;
 import pages.titanic.LifeTitanicPage;
@@ -19,13 +17,14 @@ public class ParamTest extends TestBase {
     LifeTitanicPage lifepage = new LifeTitanicPage();
 
 
+    @Disabled
     @Test
     @DisplayName("Простая проверка на наличие текста на сайте GitHub")
     void legacyHaveTextTest() {
         maingitpage.openPage()
                 .clickEnterprise();
         aipage.findTwoElements("Start a free trial");
-}
+    }
 
     @ValueSource(strings = {
             "Start a free trial",
@@ -64,10 +63,12 @@ public class ParamTest extends TestBase {
     @ParameterizedTest(name = "ParameterizedTest с использованием файла - CsvFileSource")
     @Tag("MAJOR")
     @DisplayName("CsvFileSource")
-
     void testHavetextParameterizedWithFileTest(String searchQuery, String expectedLink) {
         maintitanicpage.openPageT()
                 .clickLife();
         lifepage.checkText(expectedLink);
     }
 }
+
+
+
