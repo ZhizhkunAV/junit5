@@ -1,31 +1,31 @@
 package tests;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import pages.git.AiPage;
+import pages.git.MainGitPage;
+import pages.titanic.LifeTitanicPage;
+import pages.titanic.MainTitanicPage;
+import org.junit.jupiter.params.ParameterizedTest;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.*;
 
 @DisplayName("Параметризированные тесты, урок JUnit5")
-public class parameterizedTest {
+public class ParamTest extends TestBase {
+    MainGitPage maingitpage = new MainGitPage();
+    AiPage aipage = new AiPage();
+    MainTitanicPage maintitanicpage = new MainTitanicPage();
+    LifeTitanicPage lifepage = new LifeTitanicPage();
 
 
-    @Disabled
     @Test
     @DisplayName("Простая проверка на наличие текста на сайте GitHub")
     void legacyHaveTextTest() {
-
-        open("https://github.com");
-
-        $(".Header-old ").$$("li").findBy(text("Solutions")).hover().$(".HeaderMenu-dropdown").
-                $$("li").find(text("Enterprise")).click();
-        $(".Primer_Brand__Hero-module__Hero-actions___oH1NT")
-                .shouldBe(text("Contact sales"));
-    }
-
+        maingitpage.openPage()
+                .clickEnterprise();
+        aipage.findTwoElements("Start a free trial");
+}
 
     @ValueSource(strings = {
             "Start a free trial",
@@ -38,15 +38,10 @@ public class parameterizedTest {
     })
     @DisplayName("ParameterizedTest для использования одного значения - ValueSource")
     void testHaveTextParameterizedTest(String searchQuery) {
-
-        open("https://github.com");
-
-        $(".Header-old ").$$("li").findBy(text("Solutions")).hover().$(".HeaderMenu-dropdown").
-                $$("li").find(text("Enterprise")).click();
-        $(".Primer_Brand__Hero-module__Hero-actions___oH1NT")
-                .shouldBe(text(searchQuery));
+        maingitpage.openPage()
+                .clickEnterprise();
+        aipage.findTwoElements(searchQuery);
     }
-
 
     @CsvSource(value = {
             "Первый офицер «Титаника» — Уильям МакМастер Мердок,22.02.2020"
@@ -59,27 +54,20 @@ public class parameterizedTest {
     @DisplayName("ParameterizedTest для использования двух значений - CsvSource")
     void testHavetextParameterizedTest(String searchQuery, String expectedLink) {
 
-        open("https://titanicsociety.ru/");
-
-        $("#menu-item-197").hover().$("#menu-item-198").click();
-        $(".post-4696")
-                .shouldBe(text(expectedLink));
+        maintitanicpage.openPageT()
+                .clickLife();
+        lifepage.checkText(expectedLink);
 
     }
 
     @CsvFileSource(resources = "/testdata/datafile.csv")
-
-    @ParameterizedTest(name = "ParameterizedTest с использованием файла для использования двух значений - CsvFileSource")
+    @ParameterizedTest(name = "ParameterizedTest с использованием файла - CsvFileSource")
     @Tag("MAJOR")
     @DisplayName("CsvFileSource")
 
     void testHavetextParameterizedWithFileTest(String searchQuery, String expectedLink) {
-
-        open("https://titanicsociety.ru/");
-
-        $("#menu-item-197").hover().$("#menu-item-198").click();
-        $(".post-4696")
-                .shouldBe(text(expectedLink));
-
+        maintitanicpage.openPageT()
+                .clickLife();
+        lifepage.checkText(expectedLink);
     }
 }
